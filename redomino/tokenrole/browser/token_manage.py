@@ -99,9 +99,11 @@ class TokenAddForm(form.AddForm):
         self.widgets['token_id'].value = uuid_generator()
         delta = self.request.get('t')
         if delta:
+            delta = delta.encode('ascii', 'ignore')
             delta_dt = datetime.datetime.fromtimestamp(float(delta))
             # '2000-10-30 15:40'
-            self.widgets['token_end'].value = delta_dt.strftime('%Y-%m-%d %H:%M')
+            # self.widgets['token_end'].value = delta_dt.strftime('%Y-%m-%d %H:%M')
+            self.widgets['token_end'].value = (delta_dt.year, delta_dt.month, delta_dt.day, delta_dt.hour, delta_dt.minute)
 
     def createAndAdd(self, data):
         context = self.getContent()
